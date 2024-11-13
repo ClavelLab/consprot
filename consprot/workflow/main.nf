@@ -1,5 +1,6 @@
 nextflow.enable.dsl=2
 
+include { PYRODIGAL } from './modules/nf-core/pyrodigal/main'
 
 process any2fasta {
   //conda environemnt
@@ -33,4 +34,9 @@ workflow {
         tuple(['id': it.baseName], it)
     }
     ch_genomes.view()
+
+    ch_proteins = PYRODIGAL(ch_genomes)
+
+    ch_proteins.faa.view()
+
 }
