@@ -30,4 +30,50 @@ workflow {
     protein_counts_csv = ch_counts.csv.collectFile(
         name: 'proteins_counts.csv', skip: 1, keepHeader: true,  storeDir: workDir
     ) { it[1] } // extract the second element as the first is the propagated meta
+
+
+
+    // Prepare the channel for the pairwise comparisons
+    // e.g. with quinoa and strawberry
+    input_diamond=ch_proteins.combine(ch_diamond_db)
+    /*
+        [[id:quinoa], data/quinoa.faa, [id:quinoa], data/quinoa.dmnd]
+        [[id:strawberry], data/strawberry.faa, [id:quinoa], data/quinoa.dmnd]
+        [[id:quinoa], data/quinoa.faa, [id:strawberry], data/strawberry.dmnd]
+        [[id:strawberry], data/strawberry.faa, [id:strawberry], data/strawberry.dmnd]
+    */
+    .filter{meta_Q, Query, meta_S, Subject -> meta_Q.get('id')!= meta_S.get('id')}
+    /*
+        [[id:quinoa], data/quinoa.faa, [id:strawberry], data/strawberry.dmnd]
+        [[id:strawberry], data/strawberry.faa, [id:quinoa], data/quinoa.dmnd]
+    */
+    .map{meta_Q,Query,meta_S,Subject ->
+        tuple(
+            ['id':[meta_Q.get('id'),meta_S.get('id')].join('--')],
+            Query,
+            meta_S,
+            Subject)}
+    /*
+        [[id:strawberry|quinoa], data/strawberry.faa, [id:quinoa], data/quinoa.dmnd]
+        [[id:quinoa|strawberry], data/quinoa.faa, [id:strawberry], data/strawberry.dmnd]
+   */
+    .multiMap{
+        // from a unique channel to 2 named channels
+        // needed because diamond's process expects 4 Channels not a 4-tuple
+            it ->
+                query_faa: tuple(it[0], it[1]) // [id:strawberry|quinoa], data/strawberry.faa
+                subject_db: tuple(it[2], it[3]) // [id:quinoa], data/quinoa.dmnd
+            }
+
+    ch_diamond=DIAMOND_BLASTP(
+                input_diamond.query_faa,
+                input_diamond.subject_db,
+                // normally the last two channels are optional
+                //  but nextflow complains if not present
+                Channel.value("txt"),
+                Channel.value(
+                    "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
+                )
+            )
+
 }
