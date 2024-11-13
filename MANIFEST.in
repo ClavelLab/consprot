@@ -1,0 +1,4 @@
+include consprot/consprot.LICENSE
+include consprot/consprot.CITATION
+include consprot/consprot.VERSION
+recursive-include consprot *
