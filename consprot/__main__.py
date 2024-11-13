@@ -68,7 +68,7 @@ def common_options(func):
 @click.version_option(get_version(), "-v", "--version", is_flag=True)
 def cli():
     """Delineate bacterial genera quickly and transparently using the Percentage Of Conserved Proteins (POCPu) using a validated nextflow workflow
-    \b
+    \b\b
     For more options, run:
     consprot command --help"""
     pass
@@ -84,7 +84,7 @@ https://www.nextflow.io/docs/latest/config.html#config-profiles
 RUN EXAMPLES:
 Required:           consprot run --input [file]
 Specify threads:    consprot run ... --threads [threads]
-Enable conda:       consprot run ... --use-conda 
+Enable conda:       consprot run ... --use-conda
 Add NextFlow args:  consprot run ... -work-dir workDir -with-docker
 """
 
@@ -95,7 +95,7 @@ Add NextFlow args:  consprot run ... -work-dir workDir -with-docker
         help_option_names=["-h", "--help"], ignore_unknown_options=True
     ),
 )
-@click.option("--input", "_input", help="Input file/directory", type=str, required=True)
+@click.option("-i", "--input", "_input", help="Directory of genomes", type=click.Path(), required=True)
 @common_options
 def run(_input, **kwargs):
     """Run consprot"""
