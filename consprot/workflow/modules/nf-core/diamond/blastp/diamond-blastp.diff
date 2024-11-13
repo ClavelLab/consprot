@@ -1,0 +1,8 @@
+Changes in module 'nf-core/diamond/blastp'
+'modules/nf-core/diamond/blastp/environment.yml' is unchanged
+'modules/nf-core/diamond/blastp/main.nf' is unchanged
+'modules/nf-core/diamond/blastp/meta.yml' was removed
+'modules/nf-core/diamond/blastp/tests/main.nf.test.snap' was removed
+'modules/nf-core/diamond/blastp/tests/main.nf.test' was removed
+'modules/nf-core/diamond/blastp/tests/tags.yml' was removed
+************************************************************

@@ -2,6 +2,7 @@ nextflow.enable.dsl=2
 
 include { PYRODIGAL } from './modules/nf-core/pyrodigal/main'
 include { DIAMOND_MAKEDB } from './modules/nf-core/diamond/makedb/main'
+include { DIAMOND_BLASTP } from './modules/nf-core/diamond/blastp/main'
 
 workflow {
     // List genomes files according to extension and
