@@ -95,9 +95,9 @@ Add NextFlow args:  consprot run ... -work-dir workDir -with-docker
         help_option_names=["-h", "--help"], ignore_unknown_options=True
     ),
 )
-@click.option("-i", "--input", "_input", help="Directory of genomes",
+@click.option("--input", "_input", help="Directory of genomes",
         type=click.Path(exists=True, dir_okay=True, file_okay=False), required=True)
-@click.option("-e", "--extension", "_extension", help="Considered FASTA file format extension", default="fasta")
+@click.option("--extension", "_extension", help="Considered FASTA file format extension", default="fasta")
 @common_options
 def run(_input, _extension, **kwargs):
     """Run consprot"""
