@@ -22,8 +22,12 @@ workflow {
     // Create diamond database
     ch_diamond_db = DIAMOND_MAKEDB( ch_proteins )
 
-    // Fetch database info
+    // Get total number of proteins per genome
+    //  via the diamond database info
     ch_db_info = DIAMOND_DBINFO( ch_diamond_db )
     ch_counts = COUNT_PROTEINS( ch_db_info.out)
-    ch_counts.csv.view()
+
+    protein_counts_csv = ch_counts.csv.collectFile(
+        name: 'proteins_counts.csv', skip: 1, keepHeader: true,  storeDir: workDir
+    ) { it[1] } // extract the second element as the first is the propagated meta
 }
