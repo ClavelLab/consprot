@@ -1,28 +1,7 @@
 nextflow.enable.dsl=2
 
 include { PYRODIGAL } from './modules/nf-core/pyrodigal/main'
-
-process any2fasta {
-  //conda environemnt
-  conda 'bioconda::any2fasta=0.4.2'
-  
-  //singularity image
-  container 'https://depot.galaxyproject.org/singularity/any2fasta:0.4.2--hdfd78af_3' 
-  
-  ////docker image
-  //container 'quay.io/biocontainers/any2fasta:0.4.2--hdfd78af_3'                       
-
-  input: path(FQ)
-
-  output: stdout
-
-  script:
-  """
-  which any2fasta
-  any2fasta $FQ 
-  """
-}
-
+include { DIAMOND_MAKEDB } from './modules/nf-core/diamond/makedb/main'
 
 workflow {
     // List genomes files according to extension and
@@ -33,10 +12,11 @@ workflow {
     ).map{
         tuple(['id': it.baseName], it)
     }
-    ch_genomes.view()
 
+    // Predict proteins from genomes
+    // [ [meta], [.faa.gz] ]
     ch_proteins = PYRODIGAL(ch_genomes)
-
-    ch_proteins.faa.view()
-
+    // Create diamond database
+    ch_diamond_db = DIAMOND_MAKEDB( ch_proteins )
+    ch_diamond_db.db.view()
 }

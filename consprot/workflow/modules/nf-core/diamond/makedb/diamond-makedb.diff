@@ -1,0 +1,71 @@
+Changes in module 'nf-core/diamond/makedb'
+'modules/nf-core/diamond/makedb/environment.yml' is unchanged
+Changes in 'diamond/makedb/main.nf':
+--- modules/nf-core/diamond/makedb/main.nf
++++ modules/nf-core/diamond/makedb/main.nf
+@@ -1,5 +1,5 @@
+ process DIAMOND_MAKEDB {
+-    tag "$meta.id"
++   tag "$meta.id"
+     label 'process_medium'
+ 
+     conda "${moduleDir}/environment.yml"
+@@ -9,13 +9,9 @@
+ 
+     input:
+     tuple val(meta), path(fasta)
+-    path taxonmap
+-    path taxonnodes
+-    path taxonnames
+ 
+     output:
+     tuple val(meta), path("*.dmnd"), emit: db
+-    path "versions.yml"            , emit: versions
+ 
+     when:
+     task.ext.when == null || task.ext.when
+@@ -25,9 +21,6 @@
+     def prefix            = task.ext.prefix ?: "${meta.id}"
+     def is_compressed     = fasta.getExtension() == "gz" ? true : false
+     def fasta_name        = is_compressed ? fasta.getBaseName() : fasta
+-    def insert_taxonmap   = taxonmap ? "--taxonmap $taxonmap" : ""
+-    def insert_taxonnodes = taxonnodes ? "--taxonnodes $taxonnodes" : ""
+-    def insert_taxonnames = taxonnames ? "--taxonnames $taxonnames" : ""
+ 
+     """
+     if [ "${is_compressed}" == "true" ]; then
+@@ -39,27 +32,6 @@
+         --threads ${task.cpus} \\
+         --in  ${fasta_name} \\
+         -d ${prefix} \\
+-        ${args} \\
+-        ${insert_taxonmap} \\
+-        ${insert_taxonnodes} \\
+-        ${insert_taxonnames}
+-
+-    cat <<-END_VERSIONS > versions.yml
+-    "${task.process}":
+-        diamond: \$(diamond --version 2>&1 | tail -n 1 | sed 's/^diamond version //')
+-    END_VERSIONS
+-    """
+-
+-    stub:
+-    def args = task.ext.args ?: ''
+-    def prefix = task.ext.prefix ?: "${meta.id}"
+-
+-    """
+-    touch ${prefix}.dmnd
+-
+-    cat <<-END_VERSIONS > versions.yml
+-    "${task.process}":
+-        diamond: \$(diamond --version 2>&1 | tail -n 1 | sed 's/^diamond version //')
+-    END_VERSIONS
++        ${args}
+     """
+ }
+
+'modules/nf-core/diamond/makedb/meta.yml' was removed
+'modules/nf-core/diamond/makedb/tests/main.nf.test.snap' was removed
+'modules/nf-core/diamond/makedb/tests/main.nf.test' was removed
+'modules/nf-core/diamond/makedb/tests/tags.yml' was removed
+************************************************************
