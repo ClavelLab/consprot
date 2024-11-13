@@ -4,6 +4,7 @@ include { PYRODIGAL } from './modules/nf-core/pyrodigal/main'
 include { DIAMOND_MAKEDB } from './modules/nf-core/diamond/makedb/main'
 include { DIAMOND_BLASTP } from './modules/nf-core/diamond/blastp/main'
 include { DIAMOND_DBINFO } from './modules/local/diamond/dbinfo/main'
+include { COUNT_PROTEINS } from './modules/local/count_proteins/main'
 
 workflow {
     // List genomes files according to extension and
@@ -23,5 +24,6 @@ workflow {
 
     // Fetch database info
     ch_db_info = DIAMOND_DBINFO( ch_diamond_db )
-    ch_db_info.out.view()
+    ch_counts = COUNT_PROTEINS( ch_db_info.out)
+    ch_counts.csv.view()
 }
