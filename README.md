@@ -4,6 +4,12 @@
 
 Delineate bacterial genera quickly and transparently using the Percentage Of Conserved Proteins (POCPu) using a validated nextflow workflow
 
+## Usage
+
+```bash
+consprot run --input <directory of genomes>
+```
+
 ## Development
 
 To build `consprot` safely, work in a separate conda environment and install using the dedicated pip:

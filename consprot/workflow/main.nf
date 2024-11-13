@@ -1,19 +1,5 @@
 nextflow.enable.dsl=2
 
-process yeet {  
-  output: 
-    stdout
-
-  script:
-  """
-  echo ${params.input}
-  """
-}
-
-workflow {
-  yeet | view
-}
-
 
 process any2fasta {
   //conda environemnt
@@ -37,6 +23,7 @@ process any2fasta {
 }
 
 
-workflow convert2fasta {
-  Channel.fromPath(params.input) | any2fasta | view
+workflow {
+    ch_genomes = Channel.fromPath(params.input + "/*." + params.extension, checkIfExists:true)
+    ch_genomes.view()
 }
