@@ -24,6 +24,13 @@ process any2fasta {
 
 
 workflow {
-    ch_genomes = Channel.fromPath(params.input + "/*." + params.extension, checkIfExists:true)
+    // List genomes files according to extension and
+    //  format a meta map to use nf-core modules
+    ch_genomes = Channel.fromPath(
+        params.input + "/*." + params.extension,
+        checkIfExists:true
+    ).map{
+        tuple(['id': it.baseName], it)
+    }
     ch_genomes.view()
 }
