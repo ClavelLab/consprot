@@ -55,14 +55,14 @@ workflow {
             meta_S,
             Subject)}
     /*
-        [[id:strawberry|quinoa], data/strawberry.faa, [id:quinoa], data/quinoa.dmnd]
-        [[id:quinoa|strawberry], data/quinoa.faa, [id:strawberry], data/strawberry.dmnd]
+        [[id:strawberry--quinoa], data/strawberry.faa, [id:quinoa], data/quinoa.dmnd]
+        [[id:quinoa--strawberry], data/quinoa.faa, [id:strawberry], data/strawberry.dmnd]
    */
     .multiMap{
         // from a unique channel to 2 named channels
         // needed because diamond's process expects 4 Channels not a 4-tuple
             it ->
-                query_faa: tuple(it[0], it[1]) // [id:strawberry|quinoa], data/strawberry.faa
+                query_faa: tuple(it[0], it[1]) // [id:strawberry--quinoa], data/strawberry.faa
                 subject_db: tuple(it[2], it[3]) // [id:quinoa], data/quinoa.dmnd
             }
 
