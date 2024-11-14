@@ -78,4 +78,9 @@ workflow {
                 )
             )
     ch_matches=FILTER_MATCHES( ch_diamond.txt )
+
+    matches = ch_matches.csv.collectFile(
+        name: 'filtered_matches.csv', skip: 1, keepHeader: true,  storeDir: workDir
+    ) { it[1] } // extract the second element as the first is the propagated meta
+    matches.view()
 }
