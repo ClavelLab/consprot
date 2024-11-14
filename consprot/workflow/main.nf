@@ -6,6 +6,7 @@ include { DIAMOND_BLASTP } from './modules/nf-core/diamond/blastp/main'
 include { DIAMOND_DBINFO } from './modules/local/diamond/dbinfo/main'
 include { COUNT_PROTEINS } from './modules/local/count_proteins/main'
 include { FILTER_MATCHES } from './modules/local/filter_matches/main'
+include { COMPUTE_POCPU } from './modules/local/compute_pocpu/main'
 
 workflow {
     // List genomes files according to extension and
@@ -79,8 +80,9 @@ workflow {
             )
     ch_matches=FILTER_MATCHES( ch_diamond.txt )
 
-    matches = ch_matches.csv.collectFile(
+    matches_csv = ch_matches.csv.collectFile(
         name: 'filtered_matches.csv', skip: 1, keepHeader: true,  storeDir: workDir
     ) { it[1] } // extract the second element as the first is the propagated meta
-    matches.view()
+
+    pocpu_csv = COMPUTE_POCPU( protein_counts_csv, matches_csv )
 }
