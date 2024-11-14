@@ -5,6 +5,7 @@ include { DIAMOND_MAKEDB } from './modules/nf-core/diamond/makedb/main'
 include { DIAMOND_BLASTP } from './modules/nf-core/diamond/blastp/main'
 include { DIAMOND_DBINFO } from './modules/local/diamond/dbinfo/main'
 include { COUNT_PROTEINS } from './modules/local/count_proteins/main'
+include { FILTER_MATCHES } from './modules/local/filter_matches/main'
 
 workflow {
     // List genomes files according to extension and
@@ -65,6 +66,7 @@ workflow {
                 subject_db: tuple(it[2], it[3]) // [id:quinoa], data/quinoa.dmnd
             }
 
+    // Run the pairwise comparisons and filter the matches
     ch_diamond=DIAMOND_BLASTP(
                 input_diamond.query_faa,
                 input_diamond.subject_db,
@@ -75,5 +77,5 @@ workflow {
                     "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
                 )
             )
-
+    ch_matches=FILTER_MATCHES( ch_diamond.txt )
 }
