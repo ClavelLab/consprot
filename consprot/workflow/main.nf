@@ -11,11 +11,16 @@ include { COMPUTE_POCPU } from './modules/local/compute_pocpu/main'
 workflow {
     // List genomes files according to extension and
     //  format a meta map to use nf-core modules
-    ch_genomes = Channel.fromPath(
-        params.input + "/*." + params.extension,
-        checkIfExists:true
+    ch_genomes = Channel.fromPath([
+        params.input + "/*.fa",
+        params.input + "/*.fna",
+        params.input + "/*.fasta"
+    ],
+        checkIfExists:false
     ).map{
-        tuple(['id': it.baseName], it)
+        tuple(['id': it.baseName],
+            file(it, checkIfExists:true)
+        )
     }
 
     // Predict proteins from genomes

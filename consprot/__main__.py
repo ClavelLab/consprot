@@ -95,16 +95,14 @@ Add NextFlow args:  consprot run ... -work-dir workDir -with-docker
         help_option_names=["-h", "--help"], ignore_unknown_options=True
     ),
 )
-@click.option("--input", "_input", help="Directory of genomes",
+@click.option("--input", "_input", help="Directory of genomes. Only files ending in *.fa, *.fna, *.fasta are considered.",
         type=click.Path(exists=True, dir_okay=True, file_okay=False), required=True)
-@click.option("--extension", "_extension", help="Considered FASTA file format extension", default="fasta")
 @common_options
-def run(_input, _extension, **kwargs):
+def run(_input, **kwargs):
     """Run consprot"""
     # Config to add or update in configfile
     merge_config = {
         "input": _input,
-        "extension": _extension
     }
 
     # run!

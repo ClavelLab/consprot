@@ -1,3 +1,2 @@
-extension: 'fna'
 publish_dir_mode: 'copy'
 outdir: 'DEFAULT_OUTPUT_DIR'
