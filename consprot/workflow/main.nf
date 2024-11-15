@@ -91,3 +91,17 @@ workflow {
 
     pocpu_csv = COMPUTE_POCPU( protein_counts_csv, matches_csv )
 }
+
+workflow.onComplete {
+
+    println ( workflow.success ? """
+        ---------------------------
+        Genome directory     : ${params.input}
+        POCPu results        : ${params.output}/pocpu.csv
+        Nerdy nextflow report: ${params.output}/report.html
+        """ : """
+        Failed: ${workflow.errorReport}
+        exit status : ${workflow.exitStatus}
+        """
+    )
+}
