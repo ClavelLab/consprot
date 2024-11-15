@@ -37,7 +37,7 @@ def common_options(func):
         ),
         click.option(
             "--use-conda/--no-use-conda",
-            default=False,
+            default=True,
             help="Use conda for Nextflow processes",
             show_default=True,
         ),
