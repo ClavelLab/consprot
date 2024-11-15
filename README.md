@@ -10,7 +10,11 @@ Delineate bacterial genera quickly and transparently using the Percentage Of Con
 consprot run --input <directory of genomes> --output <name of output directory>
 ```
 
-`consprot` will run a nextflow workflow locally and compute POCPu values for all pairwise comparisons (except self-comparisons).
+`consprot` will run a nextflow workflow locally and compute POCPu values for all pairwise comparisons (except self-comparisons). This means that adding `-resume` will reuse cached results and only rerun what changed (e.g., additional genomes):
+
+```bash
+consprot run --input <directory of genomes> --output <name of output directory> -resume
+```
 
 ### Input
 
