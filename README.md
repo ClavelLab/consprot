@@ -7,8 +7,37 @@ Delineate bacterial genera quickly and transparently using the Percentage Of Con
 ## Usage
 
 ```bash
-consprot run --input <directory of genomes>
+consprot run --input <directory of genomes> --output <name of output directory>
 ```
+
+`consprot` will run a nextflow workflow locally and compute POCPu values for all pairwise comparisons (except self-comparisons).
+
+### Input
+
+A directory with genome files (`.fa`, `.fna` or `.fasta`).
+
+Upcoming:
+
+- Protein files if already available and/or to bypass pyrodigal
+- List of files to bypass nextflow file search
+
+### Output
+
+The specified output directory will contain a `pocpu.csv` with the following columns:
+
+- `query`: basename of the genome used in this comparison
+- `subject`: basename of the genome used in this comparison
+- `pocp`: value of legacy POCP [0-100]. Could exceed 100 in case of duplicated genes. 
+- `pocpu`: value of POCPu [0-100] using only unique matches. 
+
+Note: nextflow workflow produce additional files and directory where it is ran. For instance, the log file of the latest run is `.nextflow.log`, or the working directory with temporary files is `work`.
+
+## Installation
+
+At the moment, install `consprot` by cloning the repository and follow the development section.
+
+
+Upcoming: bioconda
 
 ## Development
 
