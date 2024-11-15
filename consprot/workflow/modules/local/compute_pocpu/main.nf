@@ -2,6 +2,8 @@ process COMPUTE_POCPU {
     tag "POCPu"
     label 'process_single'
 
+    publishDir "${params.output}", mode: 'copy'
+
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/pandas:2.2.1' :
